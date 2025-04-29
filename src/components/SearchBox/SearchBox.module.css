@@ -1,8 +1,13 @@
-.searchInput {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
+.searchBox {
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  border: solid 1px #e9ec0fee;
+  border-radius: 10px;
+  padding:10px 32px;
+}
+.searchTitle {
+    font-size: 18px;
+    padding-bottom: 5px;
+}

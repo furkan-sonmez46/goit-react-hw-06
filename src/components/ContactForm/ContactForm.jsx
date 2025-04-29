@@ -1,55 +1,63 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import styles from './ContactForm.module.css';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import css from "./ContactForm.module.css";
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsSlice";
+import { nanoid } from "nanoid";
 
-const ContactForm = ({ onAddContact }) => {
-  const initialValues = {
-    name: '',
-    number: '',
-  };
+const ContactForm = () => {
+    const dispatch = useDispatch();
 
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(3, 'Must be at least 3 characters')
-          .max(50, 'Must be 50 characters or less')
-      .required('Required'),
-    number: Yup.string()
-      .matches(/^\d{3}-\d{2}-\d{2}$/, 'Format: 123-45-67')
-      .required('Required'),
-  });
+    const initialValues = {
+        name: "",
+        number: "",
+    };
 
-  const handleSubmit = (values, { resetForm }) => {
-    onAddContact(values);
-    resetForm();
-  };
+    const validationSchema = Yup.object().shape({
+      name: Yup.string()
+        .min(3, "Minimum 3 characters required")
+        .max(50, "Maximum 50 characters required")
+        .required("*Required"),
+      number: Yup.string()
+        .matches(/^[0-9-]+$/, "Only numbers and hyphens are allowed")
+        .min(3, "Minimum 3 characters required")
+        .max(50, "Maximum 50 characters required")
+        .required("*Required"),
+    });
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form className={styles.contactForm}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <Field type="text" id="name" name="name" autoComplete="name" />
-          <ErrorMessage name="name" component="div" className={styles.error} />
-        </div>
+    const handleSubmit = (values, { resetForm }) => {
+        const newContact = {
+            id: nanoid(),
+            name: values.name,
+            number: values.number,
+        };
+        dispatch(addContact(newContact));
+        resetForm();
+    };
+    return (
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form className={css.contactForm}>
+          <label className={css.label}>
+            Name
+            <Field name="name" type="text" />
+            <ErrorMessage name="name" component="div" />
+          </label>
 
-        <div>
-          <label htmlFor="number">Number</label>
-          <Field type="text" id="number" name="number" autoComplete="tel" />
-          <ErrorMessage
-            name="number"
-            component="div"
-            className={styles.error}
-          />
-        </div>
+          <label className={css.label}>
+            Number
+            <Field name="number" type="text" />
+            <ErrorMessage name="number" component="div" />
+          </label>
 
-        <button type="submit">Add Contact</button>
-      </Form>
-    </Formik>
-  );
-};
-
+          <button className={css.formButton} type="submit">
+            Add contact
+          </button>
+        </Form>
+      </Formik>
+    );
+}
 export default ContactForm;

@@ -1,25 +1,29 @@
-import Contact from '../Contact/Contact';
-import styles from './ContactList.module.css';
+import { useSelector } from "react-redux";
+import Contact from "../contact/Contact";
+import css from "./ContactList.module.css";
 
-const ContactList = ({ contacts = [], onDeleteContact }) => {
-  if (!contacts || contacts.length === 0) {
-    return <p>No contacts available.</p>;
-  }
+const ContactList = () => {
+  const contacts = useSelector((state) => state.contact.items);
+  const filter = useSelector((state) => state.filters.value);
+
+  const filteredContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
-    <ul className={styles.contactList}>
-      {contacts.map(contact =>
-        contact ? (
-          <Contact
-            key={contact.id}
-            id={contact.id}
-            name={contact.name}
-            number={contact.number}
-            onDelete={onDeleteContact}
-          />
-        ) : null
+    <>
+      {filteredContacts.length === 0 ? (
+        <p className={css.matchesPTag}>No matches found</p>
+      ) : (
+        <ul className={css.contactList}>
+          {filteredContacts.map((contact) => (
+            <li key={contact.id}>
+              <Contact contact={contact} />
+            </li>
+          ))}
+        </ul>
       )}
-    </ul>
+    </>
   );
 };
 
