@@ -1,0 +1,25 @@
+.contact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .contactButton {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #d9534f;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .contactButton:hover {
+    background-color: #c9302c;
+  }
+  
